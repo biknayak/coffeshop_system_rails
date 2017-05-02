@@ -10,6 +10,10 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    unless @user == current_user
+      flash[:error] = "You are not authorized for this action"
+      redirect_to categories_url
+    end
   end
 
   # GET /users/new
