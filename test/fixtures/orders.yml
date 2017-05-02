@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  note: MyString
+  status: MyString
+  total_price: MyString
+  user: one
+
+two:
+  note: MyString
+  status: MyString
+  total_price: MyString
+  user: two
