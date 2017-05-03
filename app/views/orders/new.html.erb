@@ -83,6 +83,13 @@
       refresh_deps()
     }
   }
+  function delete_product_item(element){
+    if(order_products_list[(element.attr('data-id'))]){
+      delete order_products_list[(element.attr('data-id'))];
+      element.remove() ;
+    }
+    refresh_deps()
+  }
   // overrites default submit for the form
   $('#new_order').click(function(e){
     e.preventDefault()
@@ -101,10 +108,7 @@
     $('.cancel_product').click(function(e){
       e.preventDefault()
       element = $(this).parent().parent();
-      if(order_products_list[(element.attr('data-id'))]){
-        delete order_products_list[(element.attr('data-id'))];
-        element.remove() ;
-      }
+      delete_product_item(element)
     })
     $('.increase_count').click(function(e){
       increase_product_count($(this).parent().parent().attr('data-id'))
@@ -126,9 +130,8 @@
         var product = order_products_list[key];
         item = generate_product_item(product.name, product.id, product.price, product.quantity)
         order_products.append(item)
-        newPrice = parseInt(product.price) * parseInt(product.quantity) + parseInt(total_price.val()) 
+        newPrice = parseInt(product.price) * parseInt(product.quantity) + parseInt(total_price.val())
         total_price.val(newPrice)
     }
-    console.log('refreshing');
   }
 </script>
