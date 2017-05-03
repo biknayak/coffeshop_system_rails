@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
     puts 'in app'
     not_permitted = false
     if user_signed_in?
-      if not current_user.is_admin
+      if  current_user.is_admin != 1
       case controller_name
         when 'users'
           unless action_name == 'show'
@@ -30,6 +30,12 @@ class ApplicationController < ActionController::Base
 
       end
     end
+  end
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:image])
   end
 
 end

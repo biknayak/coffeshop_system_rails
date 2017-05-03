@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
   has_many :user_rooms, :dependent => :destroy
   has_many :rooms, :through => :user_rooms
+  has_many :orders
 end

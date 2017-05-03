@@ -5,6 +5,11 @@ class OrdersController < ApplicationController
   # GET /orders.json
   def index
     @orders = Order.all
+    end
+
+  def user_orders
+    @orders_user = Order.where(user: current_user)
+    render 'user_index'
   end
 
   # GET /orders/1
