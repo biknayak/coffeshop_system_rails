@@ -2,31 +2,27 @@
 
 <h1>Users</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Password</th>
-      <th>Is admin</th>
+      <th>Name</th>
+      <th>Room</th>
       <th>Image</th>
       <th>Extension</th>
-      <th colspan="3"></th>
+      <th colspan="3">Actions</th>
     </tr>
   </thead>
 
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= user.first_name %></td>
-        <td><%= user.last_name %></td>
-        <td><%= user.password %></td>
-        <td><%= user.is_admin %></td>
+        <td><%= user.first_name + " " + user.last_name  %></td>
+        <td><%= Room.find(user.room_id).number %></td>
         <td><%= user.image %></td>
         <td><%= user.extension %></td>
-        <td><%= link_to 'Show', user %></td>
+        <td><%= link_to 'Details', user %></td>
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
