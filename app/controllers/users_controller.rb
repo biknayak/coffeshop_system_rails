@@ -10,10 +10,15 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    unless @user == current_user
+      flash[:error] = "You are not authorized for this action"
+      redirect_to categories_url
+    end
   end
 
   # GET /users/new
   def new
+    puts 'in new'
     @user = User.new
   end
 
@@ -25,7 +30,7 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
+    puts 'in creat'
     respond_to do |format|
       if @user.save
         format.html { redirect_to @user, notice: 'User was successfully created.' }

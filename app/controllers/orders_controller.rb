@@ -5,11 +5,20 @@ class OrdersController < ApplicationController
   # GET /orders.json
   def index
     @orders = Order.all
+    end
+
+  def user_orders
+    @orders_user = Order.where(user: current_user)
+    render 'user_index'
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
+    unless @order.user == current_user
+      flash[:error] = "You are not authorized for this action"
+      redirect_to categories_url
+    end
   end
 
   # GET /orders/new
@@ -54,6 +63,10 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
+    unless @order.user == current_user
+      flash[:error] = "You are not authorized for this action"
+      redirect_to categories_url
+    end
     @order.destroy
     respond_to do |format|
       format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
