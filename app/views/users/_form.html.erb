@@ -28,7 +28,12 @@
 
   <div class="field">
     <%= f.label :is_admin %>
-    <%= f.number_field :is_admin %>
+    <%= f.select(:is_admin, [['No',0], ['Yes',1]] ) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :room_id %>
+    <%= f.collection_select(:room_id, Room.all, :id, :number ) %>
   </div>
 
   <div class="field">
