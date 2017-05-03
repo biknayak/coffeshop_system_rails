@@ -115,6 +115,9 @@
   }
   // refresh the order product list in the form
   function refresh_products_list(){
+    total_price = $('#order_total_price')
+    total_price.val(0)
+
     order_products.html('');
     for (var key in order_products_list) {
         // skip loop if the property is from prototype
@@ -123,6 +126,8 @@
         var product = order_products_list[key];
         item = generate_product_item(product.name, product.id, product.price, product.quantity)
         order_products.append(item)
+        newPrice = parseInt(product.price) * parseInt(product.quantity) + parseInt(total_price.val()) 
+        total_price.val(newPrice)
     }
     console.log('refreshing');
   }
