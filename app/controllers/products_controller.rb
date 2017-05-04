@@ -6,7 +6,6 @@ class ProductsController < ApplicationController
   def index
     @products = Product.all
 
-    @products_user = current_user.orders.each.products
 
     @products_user = Product.joins(:orders).where('orders.user_id' => current_user.id).distinct
   end
@@ -74,6 +73,6 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:name, :image, :price, :status)
+      params.require(:product).permit(:name, :Image, :price, :status)
     end
 end
