@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :note %>
-    <%= f.text_field :note %>
+    <%= f.text_area :note %>
   </div>
 
   <div class="field">
@@ -26,16 +26,12 @@
     <%= f.collection_select(:user_id, User.all, :id, :email) %>
   </div>
 
-
   <div class="field">
-    <% Product.all.collect {|x| [x.name, x.id]}.each do |c| -%>
-        <%= label_tag(name=c.first) %>
-        <%= number_field_tag( 'order[product_qty][]','',min:1) %>
-        <%= hidden_field_tag( 'order[product_ids][]',c.last) %>
-    <% end %>
+    <%= f.label :room_id %>
+    <%= f.collection_select(:room, Room.all, :id, :number) %>
   </div>
 
-    <div class="actions">
+  <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>

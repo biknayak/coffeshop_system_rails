@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   has_many :orders
-  has_one :room
+  # has_one :room
+  belongs_to :room
 
 
   mount_uploader :avatar, AvatarUploader
@@ -25,6 +26,3 @@ class User < ActiveRecord::Base
 
 
 end
-
-
-

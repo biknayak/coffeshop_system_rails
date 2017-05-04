@@ -5,11 +5,12 @@
   <%= @product.name %>
 </p>
 
+<% if @product.Image.url %>
 <p>
   <strong>Image:</strong>
   <%= image_tag @product.Image.url %>
 </p>
-
+<% end %>
 <p>
   <strong>Price:</strong>
   <%= @product.price %>
