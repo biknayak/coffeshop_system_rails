@@ -33,8 +33,36 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new(order_params)
+    #decode order params
+    order = JSON.parse params[:order]
+    user_id = params[:user_id]
+    order_note = params[:order_note]
+    order_room = params[:room_id].to_i
+    @order = Order.new()
+    total_price = 0
+    order_products = Array.new
+    order.each do |product|
+      single_order_product = OrderProduct.new({quantity: product[2].to_i ,product_id: product[0].to_i })
+      total_price += single_order_product.product.price.to_i * single_order_product.quantity.to_i
+      order_products.push(single_order_product)
+    end
 
+    # set order products
+    if order_products.count != 0
+      @order.order_products = order_products
+    end
+
+    # assign user
+    if(current_user.is_admin == 1 )
+      @order.user = User.find(user_id)
+    else
+      @order.user = current_user
+    end
+    print(order_room)
+    @order.room_id = order_room
+    @order.note = order_note
+    @order.status = "processing"
+    @order.total_price = total_price
     respond_to do |format|
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
@@ -82,6 +110,6 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:note, :status, :total_price, :user_id)
+      params.require(:order).permit(:note, :status, :total_price, :user_id, :order_products, :room_id)
     end
 end

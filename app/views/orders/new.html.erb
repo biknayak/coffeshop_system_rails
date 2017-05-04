@@ -19,6 +19,8 @@
   <div class="row">
     <%= render 'form', order: @order %>
   </div>
+  <%= link_to 'Back', orders_path %>
+
 </div>
 <div class="col-xs-6">
   <div class="row">
@@ -31,7 +33,6 @@
     <% end %>
   </div>
 </div>
-<%= link_to 'Back', orders_path %>
 <script type="text/javascript">
   order_products = $('#order_products')
   order_products_list = {}
@@ -98,32 +99,54 @@
   $('input[name=commit]').click(function(e){
     e.preventDefault()
     $(this).prop('disabled',false) // make form resubmitable in case of any errors
-    console.log(order_products_list);
     user_id = $('#order_user_id').val()
     order_note = $('#order_note').val()
     room_id = $('#order_room').val()
-    console.log(user_id);
     order_products_list_array = []
     for ( var product_id in order_products_list){
       order_products_list_array.push([ order_products_list[product_id].id,  order_products_list[product_id].name, order_products_list[product_id].quantity])
     }
-    console.log(order_products_list_array);
-    $.ajax({
-      url:'http://localhost:3000/orders.json',
-      method:'POST',
-      data: {'order': JSON.stringify(order_products_list_array),
-       'user_id': user_id,
-       'order_note': order_note,
-       'room_id' : room_id
-      },
-      success: function(data){
-        console.log(data);
-      },
-      error:function(err){
-        console.log(err);
-      }
-    })
+    form_validation = validate_form(user_id, room_id, order_products_list_array) ;
+    if(form_validation.length == 0){
+      $.ajax({
+        url:'http://localhost:3000/orders.json',
+        method:'POST',
+        data: {'order': JSON.stringify(order_products_list_array),
+         'user_id': user_id,
+         'order_note': order_note,
+         'room_id' : room_id
+        },
+        success: function(data){
+          $('.notice').text("Order submitted successfully!")
+          setTimeout(function(){
+            console.log(data);
+            window.location = data.url.slice(0,data.url.lastIndexOf('/'))
+          },2000)
+        },
+        error:function(err){
+          render_errors([errors])
+        }
+      })
+    }else{
+      render_errors(form_validation)
+    }
+
   });
+
+  // validates the form
+  function validate_form(user_id, room_id, order_products_list_array){
+    errors = []
+    if(!user_id && <%= current_user.is_admin %> == 1 ){
+      errors.push("You must select user")
+    }
+    if(!room_id || room_id.trim() == "" ){
+      errors.push("You must select Room")
+    }
+    if(order_products_list_array.length == 0 ){
+      errors.push("You must choose at least one product")
+    }
+    return errors
+  }
 
   ////////////////////////////////////////////////////////////////////
   // these functions are meant to update the UI as user fire events
@@ -162,5 +185,17 @@
         newPrice = parseInt(product.price) * parseInt(product.quantity) + parseInt(total_price.val())
         total_price.val(newPrice)
     }
+  }
+  // pushes errors to the UI
+  function render_errors(errors){
+    err = "<div id='error_explanation'>"
+    err += "<ul>"
+    console.log('errors',errors);
+    for( var error in errors ){
+      err += "<li>"+errors[error]+"</li>"
+    }
+    err += "</ul>"
+    err += "</div>"
+    $('.error').html(err)
   }
 </script>
