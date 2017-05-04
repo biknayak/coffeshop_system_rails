@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  # attr_accessible :email, :password, :remember_me, :avatar, :avatar_cache, :remove_avatar
+  #  attr_accessible :email, :password, :remember_me, :avatar, :avatar_cache, :remove_avatar
 
   validates_presence_of   :avatar
   validates_integrity_of  :avatar
@@ -23,15 +23,7 @@ class User < ActiveRecord::Base
     'public/assets/images'
   end
 
-  # u = User.new
-  # File.open('public/assets/images/lyn.jpg') do |f|
-  #   u.avatar = f
-  # end
-  #
-  # u.save!
-  # u.avatar.url # => '/url/to/file.png'
-  # u.avatar.current_path # => 'path/to/file.png'
-  # u.avatar_identifier # => 'file.png'
+
 end
 
 

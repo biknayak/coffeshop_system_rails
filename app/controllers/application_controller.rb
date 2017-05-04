@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
  # before_action :authenticate_user!
   # before_action :permissions
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   def permissions
     puts controller_name
@@ -35,7 +36,9 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:image])
+   test = devise_parameter_sanitizer.permit(:sign_up, keys: [:avatar , :first_name , :last_name , :is_admin , :room_id , :extension])
+   puts(test)
   end
+
 
 end
