@@ -90,10 +90,39 @@
     }
     refresh_deps()
   }
+
   // overrites default submit for the form
-  $('#new_order').click(function(e){
+  $('#new_order').submit(function(e){
     e.preventDefault()
+  })
+  $('input[name=commit]').click(function(e){
+    e.preventDefault()
+    $(this).prop('disabled',false) // make form resubmitable in case of any errors
     console.log(order_products_list);
+    user_id = $('#order_user_id').val()
+    order_note = $('#order_note').val()
+    room_id = $('#order_room').val()
+    console.log(user_id);
+    order_products_list_array = []
+    for ( var product_id in order_products_list){
+      order_products_list_array.push([ order_products_list[product_id].id,  order_products_list[product_id].name, order_products_list[product_id].quantity])
+    }
+    console.log(order_products_list_array);
+    $.ajax({
+      url:'http://localhost:3000/orders.json',
+      method:'POST',
+      data: {'order': JSON.stringify(order_products_list_array),
+       'user_id': user_id,
+       'order_note': order_note,
+       'room_id' : room_id
+      },
+      success: function(data){
+        console.log(data);
+      },
+      error:function(err){
+        console.log(err);
+      }
+    })
   });
 
   ////////////////////////////////////////////////////////////////////
