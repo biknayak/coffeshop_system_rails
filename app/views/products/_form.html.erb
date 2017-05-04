@@ -13,32 +13,34 @@
 
   <div class="field">
     <%= f.label :name %>
-    <%= f.text_field :name %>
+    <%= f.text_field :name , :class => "form-control"%>
   </div>
 
   <div class="field">
     <%= f.label :image %>
-    <%= f.text_field :image %>
+    <%= f.file_field :Image %>
   </div>
 
   <div class="field">
     <%= f.label :price %>
-    <%= f.number_field :price %>
+    <%= f.number_field :price, :class => "form-control" %>
   </div>
 
   <div class="field">
     <%= f.label :status %>
-    <%= f.select(:status, [['Available','available'], ['Unavailable','unavailable']] ) %>
+    <%= f.select(:status, [['Available','available'], ['Unavailable','unavailable']] )  %>
   </div>
 
   <div class="field">
     <%= f.label :category %>
     <!-- <% categories_array = Category.all.map{ |category| [category.name, category.id ] } %> -->
     <%= f.collection_select(:category_id, Category.all, :id, :name ) %>
+    <%= link_to 'Add Category', new_category_path %>
   </div>
 
 
   <div class="actions">
     <%= f.submit %>
+    <input type="reset" name="reset" value="Reset">
   </div>
 <% end %>
