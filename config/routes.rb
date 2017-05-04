@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   resources :orders
   resources :products
   resources :users
-  root to: redirect("/users/sign_in")
+  root to: redirect("/orders")
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
