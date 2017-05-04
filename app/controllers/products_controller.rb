@@ -6,9 +6,7 @@ class ProductsController < ApplicationController
   def index
     @products = Product.all
     @products_user = current_user.orders.each.products
-
   end
-
 
 
   # GET /products/1
