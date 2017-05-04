@@ -17,8 +17,8 @@
     <% @users.each do |user| %>
       <tr>
         <td><%= user.first_name + " " + user.last_name  %></td>
-        <td><%= Room.find(user.room_id).number %></td>
-        <td><%= user.image %></td>
+        <td><%= user.room.number %></td>
+        <td><img src="<%= user.image %>" alt="" class="img-thumbnail"></td>
         <td><%= user.extension %></td>
         <td><%= link_to 'Details', user %></td>
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
