@@ -8,4 +8,4 @@ App.user_orders = App.cable.subscriptions.create("UserOrdersChannel",{
   received: function(data){
     console.log(data)
   }
-)};
+});
