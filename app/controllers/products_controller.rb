@@ -6,8 +6,9 @@ class ProductsController < ApplicationController
   def index
     @products = Product.all
 
+    # @products_user = current_user.orders.each.products
+    @products_user = Product.joins(:orders).where('orders.user_id' => current_user.id).distinct
   end
-
 
 
   # GET /products/1
