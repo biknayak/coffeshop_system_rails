@@ -25,6 +25,11 @@ class OrdersController < ApplicationController
   # GET /orders/new
   def new
     @order = Order.new
+    if current_user.is_admin != 1
+      @latest_order = Order.order('created_at').last
+    end
+    @products = Product.where("status = 'available'")
+
   end
 
   # GET /orders/1/edit
