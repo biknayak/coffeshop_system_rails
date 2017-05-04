@@ -6,11 +6,20 @@ class OrdersController < ApplicationController
   def index
     # cehck if admin return all else return only user_orders
     @orders = Order.all
+    end
+
+  def user_orders
+    @orders_user = Order.where(user: current_user)
+    render 'user_index'
   end
 
   # GET /orders/1
   # GET /orders/1.json
   def show
+    unless @order.user == current_user
+      flash[:error] = "You are not authorized for this action"
+      redirect_to categories_url
+    end
   end
 
   # GET /orders/new
@@ -25,10 +34,18 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new(order_params)
+    parameters = order_params
+    products = Hash[parameters[:product_ids].zip(parameters[:product_qty])]
+    parameters.except!(:product_ids,:product_qty)
+    @order = Order.new(parameters)
+    flag = @order.save ? true :false
+    products.each do |id, qty|
+      @order.order_products.create(product_id:id ,quantity:qty)
+    end
+
 
     respond_to do |format|
-      if @order.save
+      if flag
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
       else
@@ -55,6 +72,10 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
+    unless @order.user == current_user
+      flash[:error] = "You are not authorized for this action"
+      redirect_to categories_url
+    end
     @order.destroy
     respond_to do |format|
       format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
@@ -70,6 +91,6 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:note, :status, :total_price, :user_id)
+      params.require(:order).permit(:note, :status, :total_price, :user_id, :product_qty => [],:product_ids => [])
     end
 end

@@ -1,5 +1,134 @@
 <h1>New Order</h1>
 
-<%= render 'form', order: @order %>
-
+<div class="col-xs-6">
+  <div class="row">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Actions</th>
+          <th>Price</th>
+          <th>Cancel</th>
+        </tr>
+      </thead>
+      <tbody id="order_products">
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <%= render 'form', order: @order %>
+  </div>
+</div>
+<div class="col-xs-6">
+  <div class="row">
+    <% Product.all.each do |product| %>
+      <div class="col-xs-3">
+        <div class="panel panel-default">
+          <div class="panel-body product " style="cursor:pointer" data-id="<%= product.id%>" data-price="<%= product.price %>"> <%= product.name %> <%= product.price %></div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
 <%= link_to 'Back', orders_path %>
+<script type="text/javascript">
+  order_products = $('#order_products')
+  order_products_list = {}
+
+  // add product to product order list on click
+  $('.product').click(function(e){
+    id=$(this).attr('data-id')
+    price = $(this).attr('data-price')
+    name = $(this).text()
+    order_item = generate_product_item(name, id, price)
+    // if order item doesn't exist, create it.
+    // otherwise increment the quantity attribute
+    if(order_products_list[id] == undefined){
+      order_products_list[id] = {
+        'id' : id,
+        'name' : name,
+        'price': price,
+        'quantity': 1
+      }
+    }else{
+        increase_product_count(id)
+    }
+    refresh_deps()
+  })
+
+
+  // generates a order product list element
+  function generate_product_item(name, id, price, quantity){
+    item = '<tr class="product_item" data-id='+id+'>'
+    item += '<td>' + name + '</td>'
+    item += '<td>' + quantity + '</td>' // quantity defaults to 1
+    item += '<td>'
+    item += '<i style="cursor:pointer; display:inline-block; margin-left:15px" class="glyphicon glyphicon-plus increase_count"></i>'
+    item += '<br>'
+    item += '<i style="cursor:pointer; margin-left:15px" class="glyphicon glyphicon-minus decrease_count"></i>'
+    item += '</td>' // actions column to be updated
+    item += '<td>' + price * quantity + '</td>'
+    item += '<td class="cancel_product" ><span style="cursor:pointer" class="cancel_product">X</span></td>'
+    item += '</tr>'
+    return item
+  }
+  function increase_product_count(id){
+    order_products_list[id]['quantity'] += 1 ;
+    refresh_deps()
+  }
+  function decrease_product_count(id){
+    if(order_products_list[id]['quantity'] > 1 ){
+      order_products_list[id]['quantity'] -= 1 ;
+      refresh_deps()
+    }
+  }
+  // overrites default submit for the form
+  $('#new_order').click(function(e){
+    e.preventDefault()
+    console.log(order_products_list);
+  });
+
+  ////////////////////////////////////////////////////////////////////
+  // these functions are meant to update the UI as user fire events
+  ///////////////////////////////////////////////////////////////////
+  function refresh_deps(){
+    refresh_products_list() // refresh the product list to update the UI
+    refresh_action_listeneres() //
+  }
+  // to refresh action listeners on newely added items
+  function refresh_action_listeneres(){
+    $('.cancel_product').click(function(e){
+      e.preventDefault()
+      element = $(this).parent().parent();
+      if(order_products_list[(element.attr('data-id'))]){
+        delete order_products_list[(element.attr('data-id'))];
+        element.remove() ;
+      }
+    })
+    $('.increase_count').click(function(e){
+      increase_product_count($(this).parent().parent().attr('data-id'))
+    })
+    $('.decrease_count').click(function(e){
+      decrease_product_count($(this).parent().parent().attr('data-id'))
+    })
+  }
+  // refresh the order product list in the form
+  function refresh_products_list(){
+    total_price = $('#order_total_price')
+    total_price.val(0)
+
+    order_products.html('');
+    for (var key in order_products_list) {
+        // skip loop if the property is from prototype
+        if (!order_products_list.hasOwnProperty(key)) continue;
+
+        var product = order_products_list[key];
+        item = generate_product_item(product.name, product.id, product.price, product.quantity)
+        order_products.append(item)
+        newPrice = parseInt(product.price) * parseInt(product.quantity) + parseInt(total_price.val()) 
+        total_price.val(newPrice)
+    }
+    console.log('refreshing');
+  }
+</script>

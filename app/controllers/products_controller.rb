@@ -5,7 +5,10 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @products = Product.all
+    @products_user = Product.joins(:orders).where('orders.user_id' => current_user.id).distinct
   end
+
+
 
   # GET /products/1
   # GET /products/1.json
