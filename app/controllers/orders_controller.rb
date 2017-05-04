@@ -4,6 +4,7 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
+    # cehck if admin return all else return only user_orders
     @orders = Order.all
     end
 
