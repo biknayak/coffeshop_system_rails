@@ -26,7 +26,16 @@
     <%= f.collection_select(:user_id, User.all, :id, :email) %>
   </div>
 
-  <div class="actions">
+
+  <div class="field">
+    <% Product.all.collect {|x| [x.name, x.id]}.each do |c| -%>
+        <%= label_tag(name=c.first) %>
+        <%= number_field_tag( 'order[product_qty][]','',min:1) %>
+        <%= hidden_field_tag( 'order[product_ids][]',c.last) %>
+    <% end %>
+  </div>
+
+    <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
