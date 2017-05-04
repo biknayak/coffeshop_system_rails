@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170504010117) do
+ActiveRecord::Schema.define(version: 20170504072103) do
 
-  create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "order_products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "order_products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "order_id"
     t.integer  "product_id"
     t.integer  "quantity"
@@ -26,17 +26,18 @@ ActiveRecord::Schema.define(version: 20170504010117) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "note"
     t.string   "status"
     t.string   "total_price"
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "room_id"
     t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
 
-  create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.string   "image"
     t.string   "price"
@@ -46,7 +47,7 @@ ActiveRecord::Schema.define(version: 20170504010117) do
     t.integer  "category_id"
   end
 
-  create_table "rooms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "rooms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -57,7 +58,6 @@ ActiveRecord::Schema.define(version: 20170504010117) do
     t.string   "last_name"
     t.string   "password"
     t.integer  "is_admin"
-    t.string   "image"
     t.string   "extension"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
