@@ -18,6 +18,7 @@
 
 <p>
   <strong>Image:</strong>
+
 <img src="<%= @user.avatar %>" alt="" class="img-thumbnail">
   <!--<%= @user.avatar %>-->
 </p>
@@ -27,5 +28,5 @@
   <%= @user.extension %>
 </p>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= link_to 'Edit', edit_person_path(@user) %> |
+<%= link_to 'Back', persons_path %>
