@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :orders
   resources :products
   resources :users
-
+  get '/products/search/:product_name', to: 'products#search' 
 
   root to: redirect("/orders")
 
