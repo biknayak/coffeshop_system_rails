@@ -46,7 +46,10 @@
     <% @products.each do |product| %>
       <div class="col-xs-3">
         <div class="panel panel-default">
-          <div class="panel-body product " style="cursor:pointer" data-id="<%= product.id%>" data-price="<%= product.price %>"> <%= product.name %> <%= product.price %></div>
+          <div class="panel-body product " style="cursor:pointer" data-id="<%= product.id%>" data-price="<%= product.price %>">
+            <img src="<%= product.Image.url%>" class="img-thumbnail" alt="">
+          </div>
+          <div class="panel-footer"> <%= product.name %> <%= product.price %></div>
         </div>
       </div>
     <% end %>
@@ -61,11 +64,12 @@
   $('#search').keyup(fetch_products)
 
   function fetch_products(){
-      search_product = $(this).val()
-      if($(this).val() != '' ){
+      search_product = $('#search').val()
+      if(search_product != '' ){
         $.ajax({
           url:window.location.origin+"/products/search/" + search_product+".json",
           success: function(data){
+            console.log(data);
             setProducts(data)
             set_product_click_action()
           }
@@ -74,6 +78,7 @@
         $.ajax({
           url:window.location.origin+"/products/search/+_all.json",
           success: function(data){
+            console.log(data);
             setProducts(data)
             set_product_click_action()
           }
@@ -107,15 +112,17 @@
   function setProducts(data){
     $('#all-products').html('')
     for(var product in data ){
-      panel = generate_product_panel(data[product].id, data[product].name, data[product].price)
+      panel = generate_product_panel(data[product].id, data[product].name, data[product].price, data[product].Image.url)
+      console.log(data[product].Image.url);
       $('#all-products').append(panel)
     }
     refresh_deps()
   }
-  function generate_product_panel(id, name, price){
+  function generate_product_panel(id, name, price, image_url){
     panel = '<div class="col-xs-3">'
     panel+=  '<div class="panel panel-default">'
-    panel+=  '<div class="panel-body product " style="cursor:pointer" data-id="'+id+'" data-price="'+price+'">'+name+' '+price+'</div>'
+    panel+=  '<div class="panel-body product " style="cursor:pointer" data-id="'+id+'" data-price="'+price+'">'+'<img class="img-thumbnail" src="'+image_url+'"></div>'
+    panel+=  '<div class="panel-footer" >' + name + "</div>"
     panel+=  '</div>'
     panel+=  '</div>'
     return panel
@@ -127,6 +134,18 @@
 
   order_products = $('#order_products')
   order_products_list = {}
+
+  // delete product in case it became unavailable
+  // this function just refetches the products list and delete the product from order list if exists
+  function delete_unavailable_product(id){
+    // show notification for user that an item is now unavailable
+    alert(order_products_list[id].name + " Has became unavailable, sorry for any inconvinience")
+    // refresh available products list
+    fetch_products()
+    // delete product from order list
+    element = $('.product_item[data-id='+id+']')
+    delete_product_item(element)
+  }
 
   // add product to product order list on click
   $('.product').click(function(e){
@@ -161,7 +180,7 @@
     item += '<i style="cursor:pointer; margin-left:15px" class="glyphicon glyphicon-minus decrease_count"></i>'
     item += '</td>' // actions column to be updated
     item += '<td>' + price * quantity + '</td>'
-    item += '<td class="cancel_product" ><span style="cursor:pointer" class="cancel_product">X</span></td>'
+    item += '<td ><span style="cursor:pointer" class="cancel_product">X</span></td>'
     item += '</tr>'
     return item
   }
