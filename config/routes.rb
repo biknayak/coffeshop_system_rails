@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   resources :rooms
   resources :orders
   resources :products
+  resources :checks
   resources :persons ,:controller => 'users'
-
   root to: redirect("/orders")
 
 
