@@ -9,6 +9,10 @@ class ChecksController < ApplicationController
 
   # GET /checks/1
   # GET /checks/1.json
+  def user_checks
+    @checks = Order.where('user_id'=>params[:id]).created_between
+    render json: @checks
+  end
   def show
   end
 
