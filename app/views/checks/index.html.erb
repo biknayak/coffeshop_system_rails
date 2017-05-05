@@ -13,13 +13,15 @@
 
       <tbody>
       <% @users.each do |user| %>
-
+      <% @orders_user.each do |order| %>
         <tr data-toggle="collapse" data-target="#demo<%=user.id%>" class="accordion-toggle">
           <td><%= user.first_name %></td>
         </tr>
         <tr >
           <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo<%=user.id%>"> id <%=user.id%> </div> </td>
+          <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo<%=order.id%>"> total<%=order.total_price%> </div> </td>
         </tr>
+      <% end %>
       <% end %>
 
       </tbody>

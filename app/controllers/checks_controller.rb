@@ -5,11 +5,14 @@ class ChecksController < ApplicationController
   # GET /checks.json
   def index
     @users = User.all
+    @orders_user = Order.where(user: current_user)
+    @created_before = Order.created_before()
+    @recent_orders = Order.recent_orders(10)
   end
 
-  #get all users except current user
-  scope :all_except, ->(user) { where.not(id: user) }
-  @users = User.all_except(current_user)
+  # #get all users except current user
+  # scope :all_except, ->(user) { where.not(id: user) }
+  # @users = User.all_except(current_user)
 
 
   # GET /checks/1
