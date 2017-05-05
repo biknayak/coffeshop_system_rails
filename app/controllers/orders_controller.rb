@@ -4,21 +4,50 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    # cehck if admin return all else return only user_orders
-    @orders = Order.all
-    end
+    # still need login authorization check
+    #if current_user.is_admin == 1
+      @orders = Order.all
+    #else
+      #@orders = current_user.orders
+    #end
+  end
 
   def user_orders
     @orders_user = Order.where(user: current_user)
     render 'user_index'
   end
 
-  def admin_checks
-    render 'user_index'
+  # get order products
+  def orderProducts
+    @order = Order.find(params[:id])
+    @products = @order.order_products
+    puts @products[0].product.name
+    @productsInfo = []
+    @products.each { |x|
+        @productsInfo.push(x.product)
+     }
+     puts @products.inspect
+    render :json => {:success => true,:total_price=>@order.total_price,:products => @products.as_json(),:productsinfo => @productsInfo}
+  end
+
+  # admin Home orders
+  def adminHome order
+    puts order.id
+    puts "admin Home"
+    @room = Room.find(order.room_id)
+    puts order.room_id
+    @userName = order.user
+    @products = order.order_products
+    puts @products[0].product.name
+    @productsInfo = []
+    @products.each { |x|
+        @productsInfo.push(x.product)
+     }
+    ActionCable.server.broadcast("/adminHome",{order:order,user:@userName,products:@products.as_json(),productsinfo: @productsInfo,room:@room.number})
   end
 
   # GET /orders/1
-  # GET /orders/1.json
+  #ET /orders/1.json
   def show
     unless @order.user == current_user
       flash[:error] = "You are not authorized for this action"
@@ -77,6 +106,7 @@ class OrdersController < ApplicationController
       if @order.save
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
+        adminHome @order
       else
         format.html { render :new }
         format.json { render json: @order.errors, status: :unprocessable_entity }

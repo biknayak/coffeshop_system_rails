@@ -5,6 +5,7 @@ class CategoriesController < ApplicationController
   # GET /categories.json
   def index
     @categories = Category.all
+    ActionCable.server.broadcast("orders/#{current_user.id}",{state: 'onDeliver',orderID:5})
   end
 
   # GET /categories/1

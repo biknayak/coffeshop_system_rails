@@ -1,0 +1,62 @@
+<style>
+  .hiddenRow {
+    padding: 0 !important;
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
+
+<div class="container">
+  <div class="input-group input-daterange">
+    <input type="date" class="form-control" id="start" value="2012-04-05">
+    <div class="input-group-addon">to</div>
+    <input type="date" class="form-control" id="ends" value="2012-04-19">
+  </div>
+
+  <select class="form-control">
+    <% @users.each do |user| %>
+      <option value="<%= user.id %>"><%=user.first_name+' '+user.last_name%></option>
+    <% end %>
+  </select>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Checks</div>
+
+
+    <table class="table table-condensed" style="border-collapse:collapse;">
+
+      <tbody>
+      <% @users.each do |user| %>
+
+        <tr data-toggle="collapse" data-target="#demo<%=user.id%>" user="<%=user.id%>" class="accordion-toggle get_user_checks">
+          <td><%=user.first_name+' '+user.last_name%></td>
+        </tr>
+        <tr  class="checks accordion-toggle" data-toggle="collapse" data-target="#demo">
+          <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo<%=user.id%>"> total<%=order.total_price%> </div> </td>
+        </tr>
+        <tr>
+          <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo"> id <%=user.id%> </div> </td>
+
+        </tr>
+      <% end %>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+<!--<script type="text/javascript" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>-->
+<!--<script type="text/javascript" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"/>-->
+
+<script type="text/javascript">
+    $('.get_user_checks').click(function () {
+        var start= $('#start').val()
+        var ends= $('#ends').val()
+        var id= $(this).attr('user')
+        console.log("/user/"+id+'/checks/'+start+'/'+ends)
+        $.ajax({
+            method:'get',
+            url: "/user/"+id+'/checks/'+start+'/'+ends,
+            success: function(result){
+                console.log(result)},
+        });
+    })
+</script>
