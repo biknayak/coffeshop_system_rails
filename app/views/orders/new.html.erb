@@ -82,6 +82,7 @@
     }
 
   function set_product_click_action(){
+    $('.product').off()
     $('.product').click(function(e){
       id=$(this).attr('data-id')
       price = $(this).attr('data-price')
@@ -247,14 +248,17 @@
   }
   // to refresh action listeners on newely added items
   function refresh_action_listeneres(){
+    $('.cancel_product').off()
     $('.cancel_product').click(function(e){
       e.preventDefault()
       element = $(this).parent().parent();
       delete_product_item(element)
     })
+    $('.increase_count').off()
     $('.increase_count').click(function(e){
       increase_product_count($(this).parent().parent().attr('data-id'))
     })
+    $('.decrease_count').off()
     $('.decrease_count').click(function(e){
       decrease_product_count($(this).parent().parent().attr('data-id'))
     })

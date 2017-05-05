@@ -21,10 +21,12 @@
     <%= f.text_field :total_price, :disabled => true %>
   </div>
 
+  <% if current_user.is_admin == 1 %>
   <div class="field">
     <%= f.label :user_id %>
     <%= f.collection_select(:user_id, User.all, :id, :email) %>
   </div>
+  <% end %>
 
   <div class="field">
     <%= f.label :room_id %>
