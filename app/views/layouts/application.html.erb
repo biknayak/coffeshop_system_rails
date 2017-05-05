@@ -7,7 +7,8 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
+  <body class="<%= controller_name %> <%= action_name %>">
+  <%= action_cable_meta_tag %>
   <%= link_to 'logout', destroy_user_session_path ,method: :delete %>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>

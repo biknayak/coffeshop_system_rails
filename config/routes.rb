@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   resources :orders
   resources :products
   resources :users
-
-
+  get '/adminHome' => 'admin_home#index'
+  get '/order/products/:id' => 'orders#orderProducts'
   root to: redirect("/orders")
 
 
