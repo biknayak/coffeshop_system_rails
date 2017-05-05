@@ -18,11 +18,11 @@
       <tr>
         <td><%= user.first_name + " " + user.last_name  %></td>
         <td><%= user.room.number %></td>
-        <td><img src="<%= user.image %>" alt="" class="img-thumbnail"></td>
+        <td><img src="<%= user.avatar %>" alt="" class="img-thumbnail"></td>
         <td><%= user.extension %></td>
-        <td><%= link_to 'Details', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Details',   person_path(user) %></td>
+        <td><%= link_to 'Edit', edit_person_path(user) %></td>
+        <td><%= link_to 'Delete', person_path(user), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -30,4 +30,4 @@
 
 <br>
 
-<%= link_to 'New User', new_user_path %>
+<%= link_to 'New User', new_person_path %>
