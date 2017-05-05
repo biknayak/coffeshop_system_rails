@@ -1,0 +1,32 @@
+<style>
+  .hiddenRow {
+    padding: 0 !important;
+  }
+</style>
+
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">Checks</div>
+
+
+    <table class="table table-condensed" style="border-collapse:collapse;">
+
+      <tbody>
+      <% @users.each do |user| %>
+
+        <tr data-toggle="collapse" data-target="#demo<%=user.id%>" class="accordion-toggle">
+          <td><%= user.first_name %></td>
+        </tr>
+        <tr >
+          <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo<%=user.id%>"> id <%=user.id%> </div> </td>
+        </tr>
+      <% end %>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+</script>
