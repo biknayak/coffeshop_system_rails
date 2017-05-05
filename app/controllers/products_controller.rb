@@ -7,6 +7,12 @@ class ProductsController < ApplicationController
     @products = Product.all
 
     @products_user = Product.joins(:orders).where('orders.user_id' => current_user.id).distinct
+    # format.html { render :edit }
+    respond_to do |format|  ## Add this
+      format.json { render json: @products , status: :ok }
+      format.html { render :index }
+      ## Other format
+    end
   end
 
 
@@ -62,6 +68,23 @@ class ProductsController < ApplicationController
       format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def search
+    print(params[:product_name])
+    product_name = params[:product_name]
+    if product_name != '+_all'
+      @products = Product.where("status = 'available' and name LIKE ?", "%#{product_name}%")
+    else
+      @products = Product.where("status = 'available'")
+    end
+    # format.html { render :edit }
+    respond_to do |format|  ## Add this
+      format.json { render json: @products , status: :ok }
+      format.html {  render json: @products , status: :ok  }
+      ## Other format
+    end                    ## Add this
+
   end
 
   private
