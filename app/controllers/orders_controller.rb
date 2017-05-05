@@ -13,6 +13,10 @@ class OrdersController < ApplicationController
     render 'user_index'
   end
 
+  def admin_checks
+    render 'user_index'
+  end
+
   # GET /orders/1
   # GET /orders/1.json
   def show
