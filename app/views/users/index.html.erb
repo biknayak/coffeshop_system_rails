@@ -1,3 +1,4 @@
+<div class="container" >
 <p id="notice"><%= notice %></p>
 
 <h1>Users</h1>
@@ -18,7 +19,7 @@
       <tr>
         <td><%= user.first_name + " " + user.last_name  %></td>
         <td><%= user.room.number %></td>
-        <td><img src="<%= user.avatar %>" alt="" class="img-thumbnail"></td>
+        <td><img src="<%= user.avatar  %>" alt="" class="img-thumbnail" style="width: 200px ; height: 150px"></td>
         <td><%= user.extension %></td>
         <td><%= link_to 'Details',   person_path(user) %></td>
         <td><%= link_to 'Edit', edit_person_path(user) %></td>
@@ -29,5 +30,5 @@
 </table>
 
 <br>
-
+</div>
 <%= link_to 'New User', new_person_path %>
