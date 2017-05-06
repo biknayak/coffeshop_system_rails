@@ -122,6 +122,11 @@
     delete_product_item(element)
     refresh_deps()
   }
+  // function to add available product , wraps fetch products and refresh deps
+  function insert_available_product(){
+    fetch_products()
+    refresh_deps()
+  }
 
 
 

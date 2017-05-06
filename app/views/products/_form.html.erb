@@ -1,4 +1,5 @@
 <%= form_for(product) do |f| %>
+    <div class="container" >
   <% if product.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
@@ -16,31 +17,33 @@
     <%= f.text_field :name , :class => "form-control"%>
   </div>
 
-  <div class="field">
-    <%= f.label :image %>
+      <%= f.label :image %>
+  <label class="btn btn-default btn-file" >
     <%= f.file_field :Image %>
-  </div>
+  </label>
 
   <div class="field">
     <%= f.label :price %>
     <%= f.number_field :price, :class => "form-control" %>
   </div>
 
-  <div class="field">
-    <%= f.label :status %>
+      <%= f.label :status %>
+  <div  class="form-control status ">
     <%= f.select(:status, [['Available','available'], ['Unavailable','unavailable']] )  %>
   </div>
+      <br>
 
-  <div class="field">
-    <%= f.label :category %>
+      <%= f.label :category %>
+  <div class="form-control category ">
     <!-- <% categories_array = Category.all.map{ |category| [category.name, category.id ] } %> -->
     <%= f.collection_select(:category_id, Category.all, :id, :name ) %>
     <%= link_to 'Add Category', new_category_path %>
   </div>
-
+ <br>
 
   <div class="actions">
     <%= f.submit %>
     <input type="reset" name="reset" value="Reset">
   </div>
+    </div>
 <% end %>

@@ -69,6 +69,22 @@
 
       <div>
       <% @users.each do |user| %>
+
+
+        <tr data-target="#u<%=user.id%>" user="<%=user.id%>" class=" get_user_checks" load="0">
+          <td><%=user.first_name+' '+user.last_name%></td>
+          <td><%= @total[user.id]%></td>
+        </tr>
+
+        <tr  class="checks accordion-toggle" data-toggle="collapse" data-target="#demo">
+        </tr>
+        <tr>
+          <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo"> id <%=user.id%> </div> </td>
+
+        <tr id="u<%=user.id%>"></tr>
+
+
+
         <div class="user" id="user<%=user.id%>">
           <div data-target="#u<%=user.id%>" user="<%=user.id%>" class=" get_user_checks row" load="0">
             <div class="col-sm-6 cell">  <span class="glyphicon glyphicon-plus" />   <%=user.first_name+' '+user.last_name%></div>
@@ -81,6 +97,7 @@
             </div>
           </div>
         </div>
+
       <% end %>
       </div>
     </div>
