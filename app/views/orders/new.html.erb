@@ -30,6 +30,7 @@
     </div>
   </div><br><br>
   <% if current_user.is_admin != 1 %>
+    <% if @latest_order %>
     <div class="row">
       <h5>Latest Order</h5>
       <% @latest_order.products.each do |product| %>
@@ -40,6 +41,7 @@
         </div>
       <% end %>
     </div>
+    <% end %>
   <% end %>
   <hr>
   <div id="all-products" class="row">
