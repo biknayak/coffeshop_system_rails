@@ -49,6 +49,7 @@
   </div>
 
   <select class="form-control users ">
+    <option value="0">all</option>
     <% @users.each do |user| %>
       <option value="<%= user.id %>"><%=user.first_name+' '+user.last_name%></option>
     <% end %>
@@ -65,18 +66,18 @@
 
       <div>
       <% @users.each do |user| %>
-
-        <div data-target="#u<%=user.id%>" user="<%=user.id%>" class=" get_user_checks row" load="0">
-          <div class="col-sm-6 cell">  <span class="glyphicon glyphicon-plus" />   <%=user.first_name+' '+user.last_name%></div>
-          <div class="col-sm-6 cell"><%= @total[user.id] ? @total[user.id] : '--' %></div>
-        </div>
-        <div id="u<%=user.id%>" class="checks hidden">
-          <div class="row head">
-            <div class="col-sm-6 cell"><strong></span>DATE</strong></div>
-            <div class="col-sm-6 cell"><strong>TOTAL</strong></div>
+        <div class="user" id="user<%=user.id%>">
+          <div data-target="#u<%=user.id%>" user="<%=user.id%>" class=" get_user_checks row" load="0">
+            <div class="col-sm-6 cell">  <span class="glyphicon glyphicon-plus" />   <%=user.first_name+' '+user.last_name%></div>
+            <div class="col-sm-6 cell"><%= @total[user.id] ? @total[user.id] : '--' %></div>
+          </div>
+          <div id="u<%=user.id%>" class="checks hidden">
+            <div class="row head">
+              <div class="col-sm-6 cell"><strong></span>DATE</strong></div>
+              <div class="col-sm-6 cell"><strong>TOTAL</strong></div>
+            </div>
           </div>
         </div>
-
       <% end %>
       </div>
     </div>
@@ -85,6 +86,19 @@
 
 
 <script type="text/javascript">
+    $('.users').click(function(){
+        console.log($(this).val())
+        var uid = $(this).val()
+        if (uid == 0){
+            $('.user').removeClass('hidden')
+        }
+        else{
+            $('.user').addClass('hidden')
+            $('.user#user'+uid).removeClass('hidden')
+        }
+
+
+    })
     change_icon= function (elem) {
         $(elem).children('div').children('span').toggleClass('glyphicon-plus').toggleClass('glyphicon-minus')
     }
