@@ -22,7 +22,7 @@
         <td><%= product.price %></td>
         <td><%= product.status %></td>
         <td>
-          <a style="cursor:pointer" class="toggle_status" id="<%= product.id %>"><%= product.status == 'available' ? 'unavailable' : 'available' %></a>
+          <a style="cursor:pointer" href='products/<%= product.status == 'available' ? 'unavailable' : 'available' %>/<%= product.id %>' class="toggle_status" id="<%= product.id %>"><%= product.status == 'available' ? 'unavailable' : 'available' %></a>
           <%= link_to 'Show', product %>
           <%= link_to 'Edit', edit_product_path(product) %>
           <%= link_to 'Delete', product, method: :delete, data: { confirm: 'Are you sure?' } %>

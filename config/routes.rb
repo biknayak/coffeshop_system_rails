@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get '/adminHome' => 'admin_home#index'
   get '/adminHome/change/:userID/:orderID' => 'admin_home#change'
   get '/order/products/:id' => 'orders#orderProducts'
+  get '/products/:state/:productID' => 'products#changeProductState'
   resources :checks
   resources :persons ,:controller => 'users'
   get '/user/:id/checks/:start/:ends' => 'checks#user_checks'

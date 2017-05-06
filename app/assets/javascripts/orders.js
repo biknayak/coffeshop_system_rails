@@ -13,6 +13,13 @@ jQuery(document).on("turbolinks:load",function () {
     App.Channels.user_orders.subscribe()
 });
 
+jQuery(document).on("turbolinks:load",function () {
+    if(!$(".orders.new").length > 0){
+        return
+    }
+    App.Channels.user_orders.subscribe()
+});
+
 function getProducts(orderID)
 {
   if ($('#'+orderID+' span').hasClass('glyphicon-plus'))
