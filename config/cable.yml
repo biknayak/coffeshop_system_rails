@@ -7,4 +7,5 @@ test:
 production:
   adapter: redis
   # url: redis://localhost:6379/1
-  url:  redis://redistogo:670c5aadc634dd518a84dcdfc35350eb@greeneye.redistogo.com:9583/
+  # url:  <%=ENV['REDISTOGO_URL']%>
+  url:  redis://redistogo:670c5aadc634dd518a84dcdfc35350eb@greeneye.redistogo.com:9583/ 

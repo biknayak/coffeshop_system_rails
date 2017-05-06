@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  mount ActionCable.server => '/cable'
+  mount ActionCable.server, at: '/cable'
   resources :categories
   resources :rooms
   resources :orders
