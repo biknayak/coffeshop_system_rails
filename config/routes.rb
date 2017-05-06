@@ -11,7 +11,8 @@ Rails.application.routes.draw do
   get '/order/products/:id' => 'orders#orderProducts'
   resources :checks
   resources :persons ,:controller => 'users'
-  get '/user/:id/checks/:star/:end' => 'checks#user_checks'
+  get '/user/:id/checks/:start/:ends' => 'checks#user_checks'
+  get '/check/:id/products' =>'checks#check_product'
   root to: redirect("/orders")
 
 
