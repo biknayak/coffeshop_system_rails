@@ -1,17 +1,24 @@
 class ChecksController < ApplicationController
+  before_action :set_check, only: [:show, :edit, :update, :destroy]
 
   def index
     @users = User.all
+    @total= Order.group('user_id').sum('total_price')
 
   end
 
   def user_checks
-    # @recent_orders = Order.recent_orders(10)
-    @checks = Order.where('user_id'=>params[:id]).created_between(params[:start],params[:end])
-    render json: @checks
+    if params[:start] !=0 and params[:ends]
+      @checks = Order.where('user_id'=>params[:id]).created_between(params[:start],params[:ends])
+    else
+      @checks = Order.where('user_id'=>params[:id])
+    end
+      render json: @checks
   end
 
-  def show
+  def check_product
+    @products=Order.find(params[:id]).products
+    render json: @products
   end
 
   def destroy
