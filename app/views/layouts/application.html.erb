@@ -66,10 +66,12 @@
       </div><!--/.navbar-collapse -->
     </div>
   </nav>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <p class="error"><%= flash[:error] %></p>
-    <div style="display:block"></div>
+
+    <div style="display:block; margin-top: 5%">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+      <p class="error"><%= flash[:error] %></p>
+    </div>
     <%= yield %>
   </body>
 </html>
