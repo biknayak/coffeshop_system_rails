@@ -36,6 +36,9 @@
   .container.n{
     max-width: 100%;
   }
+  .row:hover{
+      background-color: #f5f5f5;
+    }
 
 
 </style>
@@ -49,6 +52,7 @@
   </div>
 
   <select class="form-control users ">
+    <option value="0">all</option>
     <% @users.each do |user| %>
       <option value="<%= user.id %>"><%=user.first_name+' '+user.last_name%></option>
     <% end %>
@@ -66,14 +70,31 @@
       <div>
       <% @users.each do |user| %>
 
-        <div data-target="#u<%=user.id%>" user="<%=user.id%>" class=" get_user_checks row" load="0">
-          <div class="col-sm-6 cell">  <span class="glyphicon glyphicon-plus" />   <%=user.first_name+' '+user.last_name%></div>
-          <div class="col-sm-6 cell"><%= @total[user.id] ? @total[user.id] : '--' %></div>
-        </div>
-        <div id="u<%=user.id%>" class="checks hidden">
-          <div class="row head">
-            <div class="col-sm-6 cell"><strong></span>DATE</strong></div>
-            <div class="col-sm-6 cell"><strong>TOTAL</strong></div>
+
+        <tr data-target="#u<%=user.id%>" user="<%=user.id%>" class=" get_user_checks" load="0">
+          <td><%=user.first_name+' '+user.last_name%></td>
+          <td><%= @total[user.id]%></td>
+        </tr>
+
+        <tr  class="checks accordion-toggle" data-toggle="collapse" data-target="#demo">
+        </tr>
+        <tr>
+          <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo"> id <%=user.id%> </div> </td>
+
+        <tr id="u<%=user.id%>"></tr>
+
+
+
+        <div class="user" id="user<%=user.id%>">
+          <div data-target="#u<%=user.id%>" user="<%=user.id%>" class=" get_user_checks row" load="0">
+            <div class="col-sm-6 cell">  <span class="glyphicon glyphicon-plus" />   <%=user.first_name+' '+user.last_name%></div>
+            <div class="col-sm-6 cell"><%= @total[user.id] ? @total[user.id] : '--' %></div>
+          </div>
+          <div id="u<%=user.id%>" class="checks hidden">
+            <div class="row head">
+              <div class="col-sm-6 cell"><strong></span>DATE</strong></div>
+              <div class="col-sm-6 cell"><strong>TOTAL</strong></div>
+            </div>
           </div>
         </div>
 
@@ -85,6 +106,19 @@
 
 
 <script type="text/javascript">
+    $('.users').click(function(){
+        console.log($(this).val())
+        var uid = $(this).val()
+        if (uid == 0){
+            $('.user').removeClass('hidden')
+        }
+        else{
+            $('.user').addClass('hidden')
+            $('.user#user'+uid).removeClass('hidden')
+        }
+
+
+    })
     change_icon= function (elem) {
         $(elem).children('div').children('span').toggleClass('glyphicon-plus').toggleClass('glyphicon-minus')
     }

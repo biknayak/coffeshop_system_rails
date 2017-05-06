@@ -30,6 +30,7 @@
     </div>
   </div><br><br>
   <% if current_user.is_admin != 1 %>
+    <% if @latest_order %>
     <div class="row">
       <h5>Latest Order</h5>
       <% @latest_order.products.each do |product| %>
@@ -40,6 +41,7 @@
         </div>
       <% end %>
     </div>
+    <% end %>
   <% end %>
   <hr>
   <div id="all-products" class="row">
@@ -120,6 +122,11 @@
     delete_product_item(element)
     refresh_deps()
   }
+  // function to add available product , wraps fetch products and refresh deps
+  function insert_available_product(){
+    fetch_products()
+    refresh_deps()
+  }
 
 
 
@@ -183,9 +190,7 @@
         },
         success: function(data){
           $('.notice').text("Order submitted successfully!")
-          setTimeout(function(){
-            window.location = data.url.slice(0,data.url.lastIndexOf('/'))
-          },2000)
+          window.location = data.url.slice(0,data.url.lastIndexOf('/'))
         },
         error:function(err){
           render_errors([errors])

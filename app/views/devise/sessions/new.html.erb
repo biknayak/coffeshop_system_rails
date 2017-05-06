@@ -1,26 +1,71 @@
-<h2>Log in</h2>
+<style>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
+  body {
+    background: #eee !important;
+  }
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
+  .wrapper {
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
 
-  <% if devise_mapping.rememberable? -%>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
-    </div>
-  <% end -%>
+  .form-signin {
+    max-width: 380px;
+    padding: 15px 35px 45px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .form-signin-heading,
+  .checkbox {
+    margin-bottom: 30px;
+  }
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
+  .checkbox {
+    font-weight: normal;
+  }
 
-<%= render "devise/shared/links" %>
+  .form-control {
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+  @include box-sizing(border-box);
+
+  }
+
+  input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  input[type="password"] {
+    margin-bottom: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+</style>
+
+<div class="wrapper">
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name),html: {class: "form-signin"}) do |f| %>
+      <h2 class="form-signin-heading">Please login</h2>
+
+      <%= f.email_field :email, autofocus: true ,placeholder: 'Email',class:'form-control' %>
+
+      <%= f.password_field :password, autocomplete: "off" ,placeholder: 'Password',class: 'form-control',style: 'margin-top: 10px;' %>
+
+      <% if devise_mapping.rememberable? -%>
+          <div class="checkbox" style="margin-left: 20%;">
+            <%= f.check_box :remember_me %>
+            <%= f.label :remember_me %>
+          </div>
+      <% end -%>
+
+      <%= f.submit "Log in" ,class: "btn btn-lg btn-primary btn-block" %>
+  <% end %>
+
+</div>
+
+
