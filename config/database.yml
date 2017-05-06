@@ -16,16 +16,25 @@ default: &default
  username: hanan
  password: os37
  socket: /var/run/mysqld/mysqld.sock
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: root
+  password: root
+  socket: /var/run/mysqld/mysqld.sock
+
 
 development:
- <<: *default
- database: coffeshop_system_rails_development
+  <<: *default
+  database: coffeshop_system_rails_development
+
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
- <<: *default
- database: coffeshop_system_rails_test
+  <<: *default
+  database: coffeshop_system_rails_test
+
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
@@ -46,7 +55,7 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
- <<: *default
- database: coffeshop_system_rails_production
- username: coffeshop_system_rails
- password: <%= ENV['COFFESHOP_SYSTEM_RAILS_DATABASE_PASSWORD'] %>
+  <<: *default
+  database: coffeshop_system_rails_production
+  username: coffeshop_system_rails
+  password: <%= ENV['COFFESHOP_SYSTEM_RAILS_DATABASE_PASSWORD'] %>

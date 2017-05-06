@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
             not_permitted = true
           end
         when 'orders'
-          if ['edit','update','index'].include? action_name
+          if ['edit','update'].include? action_name
             not_permitted = true
           end
       end

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :users
   get '/products/search/:product_name', to: 'products#search'
   get '/adminHome' => 'admin_home#index'
+  get '/adminHome/change/:userID/:orderID' => 'admin_home#change'
   get '/order/products/:id' => 'orders#orderProducts'
   resources :checks
   resources :persons ,:controller => 'users'

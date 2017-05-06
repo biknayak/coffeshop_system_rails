@@ -69,51 +69,24 @@
         $.ajax({
           url:window.location.origin+"/products/search/" + search_product+".json",
           success: function(data){
-            console.log(data);
             setProducts(data)
-            set_product_click_action()
           }
         })
       }else{
         $.ajax({
           url:window.location.origin+"/products/search/+_all.json",
           success: function(data){
-            console.log(data);
             setProducts(data)
-            set_product_click_action()
           }
         })
       }
     }
 
-  function set_product_click_action(){
-    $('.product').off()
-    $('.product').click(function(e){
-      id=$(this).attr('data-id')
-      price = $(this).attr('data-price')
-      name = $(this).text()
-      order_item = generate_product_item(name, id, price)
-      // if order item doesn't exist, create it.
-      // otherwise increment the quantity attribute
-      if(order_products_list[id] == undefined){
-        order_products_list[id] = {
-          'id' : id,
-          'name' : name,
-          'price': price,
-          'quantity': 1
-        }
-      }else{
-          increase_product_count(id)
-      }
-      refresh_deps()
-    })
-  }
   // sets the products after being searched
   function setProducts(data){
     $('#all-products').html('')
     for(var product in data ){
       panel = generate_product_panel(data[product].id, data[product].name, data[product].price, data[product].Image.url)
-      console.log(data[product].Image.url);
       $('#all-products').append(panel)
     }
     refresh_deps()
@@ -145,28 +118,10 @@
     // delete product from order list
     element = $('.product_item[data-id='+id+']')
     delete_product_item(element)
+    refresh_deps()
   }
 
-  // add product to product order list on click
-  $('.product').click(function(e){
-    id=$(this).attr('data-id')
-    price = $(this).attr('data-price')
-    name = $(this).text()
-    order_item = generate_product_item(name, id, price)
-    // if order item doesn't exist, create it.
-    // otherwise increment the quantity attribute
-    if(order_products_list[id] == undefined){
-      order_products_list[id] = {
-        'id' : id,
-        'name' : name,
-        'price': price,
-        'quantity': 1
-      }
-    }else{
-        increase_product_count(id)
-    }
-    refresh_deps()
-  })
+
 
 
   // generates a order product list element
@@ -228,10 +183,7 @@
         },
         success: function(data){
           $('.notice').text("Order submitted successfully!")
-          setTimeout(function(){
-            console.log(data);
-            window.location = data.url.slice(0,data.url.lastIndexOf('/'))
-          },2000)
+          window.location = data.url.slice(0,data.url.lastIndexOf('/'))
         },
         error:function(err){
           render_errors([errors])
@@ -265,8 +217,31 @@
     refresh_products_list() // refresh the product list to update the UI
     refresh_action_listeneres() //
   }
+  refresh_deps()
   // to refresh action listeners on newely added items
   function refresh_action_listeneres(){
+    $('.product').off()
+    // add product to product order list on click
+    $('.product').click(function(e){
+      id=$(this).attr('data-id')
+      price = $(this).attr('data-price')
+      name = $(this).siblings('.panel-footer').text()
+      console.log(name);
+      order_item = generate_product_item(name, id, price)
+      // if order item doesn't exist, create it.
+      // otherwise increment the quantity attribute
+      if(order_products_list[id] == undefined){
+        order_products_list[id] = {
+          'id' : id,
+          'name' : name,
+          'price': price,
+          'quantity': 1
+        }
+      }else{
+          increase_product_count(id)
+      }
+      refresh_deps()
+    })
     $('.cancel_product').off()
     $('.cancel_product').click(function(e){
       e.preventDefault()
@@ -284,7 +259,6 @@
   }
   // refresh the order product list in the form
   function refresh_products_list(){
-    console.log('refreshing');
     total_price = $('#order_total_price')
     total_price.val(0)
 
@@ -304,7 +278,6 @@
   function render_errors(errors){
     err = "<div id='error_explanation'>"
     err += "<ul>"
-    console.log('errors',errors);
     for( var error in errors ){
       err += "<li>"+errors[error]+"</li>"
     }

@@ -15,22 +15,28 @@ jQuery(document).on("turbolinks:load",function () {
 
 function getProducts(orderID)
 {
-$.ajax({
-    type: "GET",
-    url: '/order/products/'+orderID,
-    dataType: "JSON",
-    success: function(data) {
-      console.log(data)
-      changebutton(orderID)
-      displayProducts(data)
-    }
-  });
+  if ($('#'+orderID+' span').hasClass('glyphicon-plus'))
+  {
+    $.ajax({
+        type: "GET",
+        url: '/order/products/'+orderID,
+        dataType: "JSON",
+        success: function(data) {
+          console.log(data)
+          changebutton(orderID,data)
+        }
+      });
+  }else {
+    $('.clear').empty();
+    $('#'+orderID+' span').removeClass("glyphicon-minus").addClass("glyphicon-plus")
+  }
 }
-function changebutton(buttonid){
+function changebutton(buttonid,data){
   $('.glyphicon').each(function(){
     if ($(this).attr("name") === buttonid)
     {
-        $(this).toggleClass("glyphicon-plus glyphicon-minus")
+          $(this).toggleClass("glyphicon-plus glyphicon-minus")
+          displayProducts(data)
     }
     else {
       $(this).removeClass("glyphicon-minus")

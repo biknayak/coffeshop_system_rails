@@ -17,7 +17,7 @@
     <% @products.each do |product| %>
       <tr>
         <td><%= product.name %></td>
-       <td><%= product.Image %></td>
+       <td><img src="<%= product.Image.url %>" alt="product_img" class="img-thumbnail" style="width:100px;"></td>
         <td><%= product.price %></td>
         <td><%= product.status %></td>
         <td>
