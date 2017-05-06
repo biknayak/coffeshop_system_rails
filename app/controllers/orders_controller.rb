@@ -59,7 +59,7 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new
     if current_user.is_admin != 1
-      @latest_order = Order.order('created_at').last
+      @latest_order = current_user.orders.order('created_at').last
     end
     @products = Product.where("status = 'available'")
 
