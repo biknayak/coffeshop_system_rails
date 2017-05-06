@@ -24,16 +24,28 @@
       <div id="navbar" class="navbar-collapse collapse">
        <ul class="nav navbar-nav">
          <% if current_user %>
-           <li>
-            <%= link_to 'Home', new_order_path ,style: 'color: white' %>
-           </li>
            <% if current_user.is_admin == 0 %>
                <li>
                 <%= link_to 'My Orders', orders_path ,style: 'color: white' %>
                </li>
+               <li>
+                <%= link_to 'Home', new_order_path ,style: 'color: white' %>
+               </li>
             <% else %>
                 <li>
+                  <%= link_to 'Home', adminHome_path ,style: 'color: white' %>
+                </li>
+                <li>
                   <%= link_to 'Products', products_path ,style: 'color: white' %>
+                </li>
+                <li>
+                  <%= link_to 'Users', persons_path ,style: 'color: white' %>
+                </li>
+                <li>
+                  <%= link_to 'Manual Order', new_order_path ,style: 'color: white' %>
+                </li>
+                <li>
+                  <%= link_to 'Checks', checks_path ,style: 'color: white' %>
                 </li>
 
 
