@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
             not_permitted = true
           end
         when 'products','categories','rooms'
-          unless action_name == 'index' or action_name == 'show'
+          unless action_name == 'index' or action_name == 'show' or action_name == 'search'
             not_permitted = true
           end
         when 'orders'

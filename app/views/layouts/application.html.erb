@@ -7,8 +7,10 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <body class="<%= controller_name %> <%= action_name %>">
+    <%= action_cable_meta_tag %>
+    <%= link_to 'logout', destroy_user_session_path ,method: :delete %>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -24,7 +26,6 @@
          <li>
           <%= link_to 'logout', destroy_user_session_path ,method: :delete,style: 'color: white' %>
          </li>
-
        </ul>
       </div><!--/.navbar-collapse -->
     </div>
