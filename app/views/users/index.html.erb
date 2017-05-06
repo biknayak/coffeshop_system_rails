@@ -1,3 +1,4 @@
+<div class="container" >
 <p id="notice"><%= notice %></p>
 
 <h1>Users</h1>
@@ -22,7 +23,7 @@
             <%= Room.find(user.room_id).number %>
           <% end %>
         </td>
-        <td><img src="<%= user.avatar %>" alt="" class="img-thumbnail"></td>
+        <td><img src="<%= user.avatar %>" alt="" class="img-thumbnail"  style="width: 50px ;"></td>
         <td><%= user.extension %></td>
         <td><%= link_to 'Details',   person_path(user) %></td>
         <td><%= link_to 'Edit', edit_person_path(user) %></td>
@@ -33,5 +34,5 @@
 </table>
 
 <br>
-
+</div>
 <%= link_to 'New User', new_person_path %>
