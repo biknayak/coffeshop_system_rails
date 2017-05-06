@@ -146,6 +146,12 @@ class OrdersController < ApplicationController
     # end
   end
 
+  def ordersWithinDate
+    @orders = Order.where('user_id'=> current_user.id).created_between(params[:start],params[:end])
+    puts @orders
+    render json: @orders
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order
