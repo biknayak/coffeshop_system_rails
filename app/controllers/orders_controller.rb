@@ -131,15 +131,18 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
-    unless @order.user == current_user
+    if @order.user != current_user
       flash[:error] = "You are not authorized for this action"
-      redirect_to categories_url
+      redirect_to orders_url
+    else
+      @order.destroy
+      flash[:notice] ='Order was successfully Deleted.'
+      redirect_to orders_url
     end
-    @order.destroy
-    respond_to do |format|
-      format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    # respond_to do |format|
+    #   format.html { render orders_url, notice:  }
+    #   format.json { head :no_content }
+    # end
   end
 
   private

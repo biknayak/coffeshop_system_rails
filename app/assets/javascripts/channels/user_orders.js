@@ -14,6 +14,8 @@ App.Channels.user_orders.subscribe = function(){ App.cable.subscriptions.create(
   },
   received: function(data){
     console.log(data)
+      $('#'+data.orderID+' td:nth-child(2)').text(data.state);
+      $('#'+data.orderID+' td:nth-child(4)').text('');
   }
   });
 }

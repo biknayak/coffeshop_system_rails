@@ -183,9 +183,7 @@
         },
         success: function(data){
           $('.notice').text("Order submitted successfully!")
-          setTimeout(function(){
-            window.location = data.url.slice(0,data.url.lastIndexOf('/'))
-          },2000)
+          window.location = data.url.slice(0,data.url.lastIndexOf('/'))
         },
         error:function(err){
           render_errors([errors])
