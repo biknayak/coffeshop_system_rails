@@ -26,6 +26,7 @@ App.Channels.user_orders.subscribe = function(){ App.cable.subscriptions.create(
       }
       else {
         console.log(data.state)
+        insert_available_product()
       }
     }
   }

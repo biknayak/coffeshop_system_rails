@@ -43,7 +43,7 @@ class OrdersController < ApplicationController
     @products.each { |x|
         @productsInfo.push(x.product)
      }
-    ActionCable.server.broadcast("/adminHome",{order:order,user:@userName,products:@products.as_json(),productsinfo: @productsInfo,room:@room.number})
+    ActionCable.server.broadcast("/adminHome",{state:"add",order:order,user:@userName,products:@products.as_json(),productsinfo: @productsInfo,room:@room.number})
   end
 
   # GET /orders/1
@@ -137,6 +137,7 @@ class OrdersController < ApplicationController
     else
       @order.destroy
       flash[:notice] ='Order was successfully Deleted.'
+      ActionCable.server.broadcast("/adminHome",{state:"remove",orderID:@order.id})
       redirect_to orders_url
     end
     # respond_to do |format|
