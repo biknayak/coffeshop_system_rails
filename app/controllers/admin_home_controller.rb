@@ -9,4 +9,11 @@ class AdminHomeController < ApplicationController
     puts @rooms
     puts @orders
   end
+
+  def change
+    if Order.update(params[:orderID],:status => 'Out For Delivery')
+      ActionCable.server.broadcast("orders/#{params[:userID]}",{state: 'Out For Delivery',orderID:params[:orderID]})
+    end
+    redirect_to '/adminHome'
+  end
 end
