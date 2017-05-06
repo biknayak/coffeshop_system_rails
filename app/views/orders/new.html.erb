@@ -1,8 +1,6 @@
-<h1>New Order</h1>
-
 <div class="col-xs-6">
   <div class="row">
-    <table class="table">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th>Product Name</th>
@@ -20,22 +18,134 @@
     <%= render 'form', order: @order %>
   </div>
   <%= link_to 'Back', orders_path %>
-
 </div>
-<div class="col-xs-6">
-  <div class="row">
-    <% Product.all.each do |product| %>
+<div class="col-xs-6" style="padding-right:50px;padding-left:50px">
+  <div class='row'>
+    <div class='col-xs-8 col-xs-push-4'>
+      <div class="input-group">
+        <div class="input-group">
+          <span class="input-group-addon" id="sizing-addon2"><i class="glyphicon glyphicon-search"></i></span>
+          <input type="text" class="form-control" placeholder="Search" id="search" aria-describedby="sizing-addon2">
+        </div>
+    </div>
+  </div><br><br>
+  <% if current_user.is_admin != 1 %>
+    <div class="row">
+      <h5>Latest Order</h5>
+      <% @latest_order.products.each do |product| %>
+        <div class="col-xs-3">
+          <div class="panel panel-default">
+            <div class="panel-body product " style="cursor:pointer" data-id="<%= product.id%>" data-price="<%= product.price %>"> <%= product.name %> <%= product.price %></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <hr>
+  <div id="all-products" class="row">
+    <% @products.each do |product| %>
       <div class="col-xs-3">
         <div class="panel panel-default">
-          <div class="panel-body product " style="cursor:pointer" data-id="<%= product.id%>" data-price="<%= product.price %>"> <%= product.name %> <%= product.price %></div>
+          <div class="panel-body product " style="cursor:pointer" data-id="<%= product.id%>" data-price="<%= product.price %>">
+            <img src="<%= product.Image.url%>" class="img-thumbnail" alt="">
+          </div>
+          <div class="panel-footer"> <%= product.name %> <%= product.price %></div>
         </div>
       </div>
     <% end %>
   </div>
 </div>
 <script type="text/javascript">
+
+  ////////////////////////////////////////////////////
+  // This section is for the search functionality
+  ///////////////////////////////////////////////////
+
+  $('#search').keyup(fetch_products)
+
+  function fetch_products(){
+      search_product = $('#search').val()
+      if(search_product != '' ){
+        $.ajax({
+          url:window.location.origin+"/products/search/" + search_product+".json",
+          success: function(data){
+            console.log(data);
+            setProducts(data)
+            set_product_click_action()
+          }
+        })
+      }else{
+        $.ajax({
+          url:window.location.origin+"/products/search/+_all.json",
+          success: function(data){
+            console.log(data);
+            setProducts(data)
+            set_product_click_action()
+          }
+        })
+      }
+    }
+
+  function set_product_click_action(){
+    $('.product').off()
+    $('.product').click(function(e){
+      id=$(this).attr('data-id')
+      price = $(this).attr('data-price')
+      name = $(this).text()
+      order_item = generate_product_item(name, id, price)
+      // if order item doesn't exist, create it.
+      // otherwise increment the quantity attribute
+      if(order_products_list[id] == undefined){
+        order_products_list[id] = {
+          'id' : id,
+          'name' : name,
+          'price': price,
+          'quantity': 1
+        }
+      }else{
+          increase_product_count(id)
+      }
+      refresh_deps()
+    })
+  }
+  // sets the products after being searched
+  function setProducts(data){
+    $('#all-products').html('')
+    for(var product in data ){
+      panel = generate_product_panel(data[product].id, data[product].name, data[product].price, data[product].Image.url)
+      console.log(data[product].Image.url);
+      $('#all-products').append(panel)
+    }
+    refresh_deps()
+  }
+  function generate_product_panel(id, name, price, image_url){
+    panel = '<div class="col-xs-3">'
+    panel+=  '<div class="panel panel-default">'
+    panel+=  '<div class="panel-body product " style="cursor:pointer" data-id="'+id+'" data-price="'+price+'">'+'<img class="img-thumbnail" src="'+image_url+'"></div>'
+    panel+=  '<div class="panel-footer" >' + name + "</div>"
+    panel+=  '</div>'
+    panel+=  '</div>'
+    return panel
+  }
+  //////////////////////////////////////////////////
+  // This section is for the form functionality
+  /////////////////////////////////////////////////
+
+
   order_products = $('#order_products')
   order_products_list = {}
+
+  // delete product in case it became unavailable
+  // this function just refetches the products list and delete the product from order list if exists
+  function delete_unavailable_product(id){
+    // show notification for user that an item is now unavailable
+    alert(order_products_list[id].name + " Has became unavailable, sorry for any inconvinience")
+    // refresh available products list
+    fetch_products()
+    // delete product from order list
+    element = $('.product_item[data-id='+id+']')
+    delete_product_item(element)
+  }
 
   // add product to product order list on click
   $('.product').click(function(e){
@@ -70,7 +180,7 @@
     item += '<i style="cursor:pointer; margin-left:15px" class="glyphicon glyphicon-minus decrease_count"></i>'
     item += '</td>' // actions column to be updated
     item += '<td>' + price * quantity + '</td>'
-    item += '<td class="cancel_product" ><span style="cursor:pointer" class="cancel_product">X</span></td>'
+    item += '<td ><span style="cursor:pointer" class="cancel_product">X</span></td>'
     item += '</tr>'
     return item
   }
@@ -109,7 +219,7 @@
     form_validation = validate_form(user_id, room_id, order_products_list_array) ;
     if(form_validation.length == 0){
       $.ajax({
-        url:'http://localhost:3000/orders.json',
+        url:window.location.origin+'/orders.json',
         method:'POST',
         data: {'order': JSON.stringify(order_products_list_array),
          'user_id': user_id,
@@ -157,20 +267,24 @@
   }
   // to refresh action listeners on newely added items
   function refresh_action_listeneres(){
+    $('.cancel_product').off()
     $('.cancel_product').click(function(e){
       e.preventDefault()
       element = $(this).parent().parent();
       delete_product_item(element)
     })
+    $('.increase_count').off()
     $('.increase_count').click(function(e){
       increase_product_count($(this).parent().parent().attr('data-id'))
     })
+    $('.decrease_count').off()
     $('.decrease_count').click(function(e){
       decrease_product_count($(this).parent().parent().attr('data-id'))
     })
   }
   // refresh the order product list in the form
   function refresh_products_list(){
+    console.log('refreshing');
     total_price = $('#order_total_price')
     total_price.val(0)
 

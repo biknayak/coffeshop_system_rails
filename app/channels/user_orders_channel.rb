@@ -1,9 +1,9 @@
 class UserOrdersChannel < ApplicationCable::Channel
   def subscribed
-     stream_from "orders"
+     stream_from "orders/#{current_user.id}"
   end
 
   def unsubscribed
-    current_user.disappear
+    stop_all_streams
   end
 end
