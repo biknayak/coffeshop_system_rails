@@ -101,14 +101,15 @@
                     url: "/check/"+id+'/products/',
                     success: function (result) {
                         checks = ''
-                        for (product in result) {
-                            product = result[product]
-                            checks+= '<div class="col-sm-4 pro"> <h2>'+product.name+'</h2> <p>'+product.price+'</p> </div> '
+                        for (chk in result) {
+                            chk = result[chk]
+                            checks+= '<div class="col-sm-4 pro"> <h2>'+chk.product.name+' <small>$'+chk.product.price+'</small></h2> <p>x'+chk.quantity+'</p> </div> '
                             console.log(check)
                         }
                         console.log(checks)
                         products.append(checks)
                         check.attr('load',1)
+                        check.trigger('click')
 
                     }
                 });
@@ -149,7 +150,7 @@
                 user_check.append(checks)
                 user.attr('load',1)
                 click_check(id)
-
+                user.trigger('click')
                 }
             });
         }

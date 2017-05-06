@@ -18,7 +18,8 @@ class ChecksController < ApplicationController
 
   def check_product
     @products=Order.find(params[:id]).products
-    render json: @products
+    @products=OrderProduct.where('order_id'=>params[:id])
+    render json: @products, include: ['product']
   end
 
   def destroy
