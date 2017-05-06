@@ -32,6 +32,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     puts 'in creat'
+    puts 'befor save ',user_params.inspect
+
     respond_to do |format|
       if @user.save
         format.html { redirect_to persons_url, notice: 'User was successfully created.' }
@@ -75,6 +77,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :password, :is_admin, :avatar, :extension,:email)
+      params.require(:user).permit(:first_name, :last_name, :password, :is_admin, :avatar, :extension,:email ,:room_id)
     end
 end

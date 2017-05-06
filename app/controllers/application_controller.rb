@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   def permissions
-    puts controller_name
+    puts controller_name+'/'+action_name
     puts 'in app'
     not_permitted = false
     if user_signed_in?
