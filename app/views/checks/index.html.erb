@@ -1,62 +1,160 @@
 <style>
-  .hiddenRow {
-    padding: 0 !important;
+
+  .hidden,.hidden .cell{
+    display: none;
+    border: none;
   }
+  .panel-heading{
+    border-bottom-color: #f5f5f5;
+    border-bottom-style: solid;
+    border-width: 3px;
+    padding: 0px;
+  }
+  .cell{
+    border-bottom-color: #f5f5f5;
+    border-top-color: #f5f5f5;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-width: thin;
+    padding:1%;
+  }
+  .checks,.products{
+    margin: 1%;
+
+  }
+  .head{
+    margin: 0px;
+
+  }
+  .panel{
+    margin-top: 3%;
+  }
+  .users{
+    margin-top: 5%;
+    max-width: 50%;
+  }
+  .container.n{
+    max-width: 100%;
+  }
+
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
 
 <div class="container">
   <div class="input-group input-daterange">
-    <input type="date" class="form-control" id="start" value="2012-04-05">
+    <input type="date" class="form-control" id="start" value="2017-05-03">
     <div class="input-group-addon">to</div>
-    <input type="date" class="form-control" id="ends" value="2012-04-19">
+    <input type="date" class="form-control" id="ends" value="2017-05-05">
   </div>
 
-  <select class="form-control">
+  <select class="form-control users ">
     <% @users.each do |user| %>
       <option value="<%= user.id %>"><%=user.first_name+' '+user.last_name%></option>
     <% end %>
   </select>
 
   <div class="panel panel-default">
-    <div class="panel-heading">Checks</div>
+    <div class="panel-heading  ">
+      <div class="row head">
+      <div class="col-sm-6 cell"><strong>NAME</strong></div>
+      <div class="col-sm-6 cell"><strong>TOTAL</strong></div>
+      </div>
+      </div>
+    <div class="container n">
 
-
-    <table class="table table-condensed" style="border-collapse:collapse;">
-
-      <tbody>
+      <div>
       <% @users.each do |user| %>
 
-        <tr data-toggle="collapse" data-target="#demo<%=user.id%>" user="<%=user.id%>" class="accordion-toggle get_user_checks">
-          <td><%=user.first_name+' '+user.last_name%></td>
-        </tr>
-        <tr  class="checks accordion-toggle" data-toggle="collapse" data-target="#demo">
-          <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo<%=user.id%>"> total<%=order.total_price%> </div> </td>
-        </tr>
-        <tr>
-          <td colspan="6" class="hiddenRow"><div class="accordian-body collapse" id="demo"> id <%=user.id%> </div> </td>
+        <div data-target="#u<%=user.id%>" user="<%=user.id%>" class=" get_user_checks row" load="0">
+          <div class="col-sm-6 cell"><%=user.first_name+' '+user.last_name%></div>
+          <div class="col-sm-6 cell"><%= @total[user.id] ? @total[user.id] : '--' %></div>
+        </div>
+        <div id="u<%=user.id%>" class="checks hidden">
+          <div class="row head">
+            <div class="col-sm-6 cell"><strong>DATE</strong></div>
+            <div class="col-sm-6 cell"><strong>TOTAL</strong></div>
+          </div>
+        </div>
 
-        </tr>
       <% end %>
-
-      </tbody>
-    </table>
+      </div>
+    </div>
   </div>
 </div>
-<!--<script type="text/javascript" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>-->
-<!--<script type="text/javascript" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"/>-->
+
 
 <script type="text/javascript">
+    click_check=function (pid) {
+        $('div#u'+pid+' div.get_product').click(function () {
+            var check =$(this)
+            var id= check.attr('check')
+            var check_id=check.attr('data-target')
+            var products = $('div#c'+id)
+            var load=check.attr('load')
+            if(load==1) {
+                products.toggleClass('hidden')
+                console.log(load,'if')
+            }
+            else{
+                $.ajax({
+                    method: 'get',
+                    url: "/check/"+id+'/products/',
+                    success: function (result) {
+                        checks = ''
+                        for (chk in result) {
+                            chk = result[chk]
+                            checks+= '<div class="col-sm-4 pro"> <h2>'+chk.product.name+' <small>$'+chk.product.price+'</small></h2> <p>x'+chk.quantity+'</p> </div> '
+                            console.log(check)
+                        }
+                        console.log(checks)
+                        products.append(checks)
+                        check.attr('load',1)
+                        check.trigger('click')
+
+                    }
+                });
+            }
+        })
+
+    }
+
     $('.get_user_checks').click(function () {
-        var start= $('#start').val()
-        var ends= $('#ends').val()
-        var id= $(this).attr('user')
-        console.log("/user/"+id+'/checks/'+start+'/'+ends)
-        $.ajax({
-            method:'get',
-            url: "/user/"+id+'/checks/'+start+'/'+ends,
-            success: function(result){
-                console.log(result)},
-        });
+        var user =$(this)
+        var start= $('#start').val() ? $('#start').val() : 0
+        var ends= $('#ends').val() ? $('#ends').val() : 0
+        var id= user.attr('user')
+        var user_check_id=user.attr('data-target')
+        var user_check = $('div#u'+id)
+        var load=user.attr('load')
+        if(load==1) {
+            user_check.toggleClass('hidden')
+            if (!user_check.attr('class').includes('hidden')){
+                $('.u'+id).addClass('hidden')
+            }
+
+        }
+        else {
+            console.log('else')
+//            user_check.append('<table id="u'+id+'" class="table table-condensed checks" style ="width: 100%;"><thead><tr><th>date</th><th>price</th></tr></thead><tbody></tbody></table>')
+            $.ajax({
+                method: 'get',
+                url: "/user/" + id + '/checks/' + start + '/' + ends,
+                success: function (result) {
+                    checks = ''
+                    for (check in result) {
+                        check = result[check]
+                        checks+= '<div class="get_product row"  data-toggle="c'+check.id+'" load="0" check="'+check.id+'"><div class="col-sm-6 cell">'+ check['created_at']+'</div ><div class="col-sm-6 cell">'+ check ['total_price']+'</div></div><div id="c'+check.id+'" class="row products u'+id+'"></div>'
+                        console.log(check)
+                    }
+                    console.log(checks)
+                user_check.append(checks)
+                user.attr('load',1)
+                click_check(id)
+                user.trigger('click')
+                }
+            });
+        }
     })
+
 </script>
+
