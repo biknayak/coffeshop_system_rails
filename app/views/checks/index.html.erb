@@ -37,6 +37,7 @@
     max-width: 100%;
   }
 
+
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
 
@@ -66,12 +67,12 @@
       <% @users.each do |user| %>
 
         <div data-target="#u<%=user.id%>" user="<%=user.id%>" class=" get_user_checks row" load="0">
-          <div class="col-sm-6 cell"><%=user.first_name+' '+user.last_name%></div>
+          <div class="col-sm-6 cell">  <span class="glyphicon glyphicon-plus" />   <%=user.first_name+' '+user.last_name%></div>
           <div class="col-sm-6 cell"><%= @total[user.id] ? @total[user.id] : '--' %></div>
         </div>
         <div id="u<%=user.id%>" class="checks hidden">
           <div class="row head">
-            <div class="col-sm-6 cell"><strong>DATE</strong></div>
+            <div class="col-sm-6 cell"><strong></span>DATE</strong></div>
             <div class="col-sm-6 cell"><strong>TOTAL</strong></div>
           </div>
         </div>
@@ -84,8 +85,15 @@
 
 
 <script type="text/javascript">
+    change_icon= function (elem) {
+        $(elem).children('div').children('span').toggleClass('glyphicon-plus').toggleClass('glyphicon-minus')
+    }
+
     click_check=function (pid) {
         $('div#u'+pid+' div.get_product').click(function () {
+            change_icon(this)
+            var thiss=this
+
             var check =$(this)
             var id= check.attr('check')
             var check_id=check.attr('data-target')
@@ -110,6 +118,9 @@
                         products.append(checks)
                         check.attr('load',1)
                         check.trigger('click')
+                        change_icon(thiss)
+
+
 
                     }
                 });
@@ -119,6 +130,8 @@
     }
 
     $('.get_user_checks').click(function () {
+        change_icon(this)
+        var thiss=this
         var user =$(this)
         var start= $('#start').val() ? $('#start').val() : 0
         var ends= $('#ends').val() ? $('#ends').val() : 0
@@ -143,7 +156,7 @@
                     checks = ''
                     for (check in result) {
                         check = result[check]
-                        checks+= '<div class="get_product row"  data-toggle="c'+check.id+'" load="0" check="'+check.id+'"><div class="col-sm-6 cell">'+ check['created_at']+'</div ><div class="col-sm-6 cell">'+ check ['total_price']+'</div></div><div id="c'+check.id+'" class="row products u'+id+'"></div>'
+                        checks+= '<div class="get_product row"  data-toggle="c'+check.id+'" load="0" check="'+check.id+'"><div class="col-sm-6 cell"><span class="glyphicon glyphicon-plus" />    '  + check['created_at']+'</div ><div class="col-sm-6 cell">'+ check ['total_price']+'</div></div><div id="c'+check.id+'" class="row products u'+id+'"></div>'
                         console.log(check)
                     }
                     console.log(checks)
@@ -151,10 +164,13 @@
                 user.attr('load',1)
                 click_check(id)
                 user.trigger('click')
+                    change_icon(thiss)
+
                 }
             });
         }
     })
+
 
 </script>
 

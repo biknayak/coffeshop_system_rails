@@ -5,11 +5,11 @@ class OrdersController < ApplicationController
   # GET /orders.json
   def index
     # still need login authorization check
-    #if current_user.is_admin == 1
+    if current_user.is_admin == 1
       @orders = Order.all
-    #else
-      #@orders = current_user.orders
-    #end
+    else
+      @orders = current_user.orders
+    end
   end
 
   def user_orders
