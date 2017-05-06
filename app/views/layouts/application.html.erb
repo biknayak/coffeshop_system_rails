@@ -84,6 +84,8 @@
     <p class="alert"><%= alert %></p>
     <p class="error"><%= flash[:error] %></p>
     <div style="display:block"></div>
-    <%= yield %>
+    <div class="container">
+      <%= yield %>
+    </div>
   </body>
 </html>
